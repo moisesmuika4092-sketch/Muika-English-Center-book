@@ -1,0 +1,1 @@
+Todos os ficheiros estao na mesma pasta (sem subpastas), para enviar de uma vez para o GitHub.
