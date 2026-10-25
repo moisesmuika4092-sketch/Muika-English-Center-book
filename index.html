@@ -73,4 +73,20 @@ function tog(n){P[L+n]=P[L+n]?0:1;save();route(true)}
 function route(keep){const m=/^#(en|fr)(?:-t(\d+))?$/.exec(location.hash);if(m)L=m[1];items=G().units.flatMap(u=>u.items);const n=m&&m[2]&&+m[2];if(n>=1&&n<=items.length)view(n);else home();if(keep!==true)scrollTo(0,0)}
 addEventListener('hashchange',()=>{tb='tx';route()});route();
 
-</script><script>try{if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0)navigator.serviceWorker.register('sw.js')}catch(e){}</script></body></html>
+</script><script>try{if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0)navigator.serviceWorker.register('sw.js')}catch(e){}</script><script>
+let dp=null;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e});
+addEventListener('appinstalled',()=>{dp=null});
+const STAND=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+const INAPP=/FBAN|FBAV|Instagram|WhatsApp|Line\/|; wv\)|GSA\/|Telegram/i.test(navigator.userAgent);
+function inst(){const m=document.getElementById('im');
+  if(dp){dp.prompt();dp.userChoice.finally(()=>{dp=null});return}
+  m.textContent=INAPP?'Este navegador não permite instalar. Toque nos três pontos ⋮ e escolha “Abrir no Chrome”; depois use ⋮ → “Instalar app”.':'Toque nos três pontos ⋮ do Chrome e escolha “Instalar app” ou “Adicionar ao ecrã inicial”. No iPhone: Safari → Partilhar → “Adicionar ao ecrã principal”.'}
+function tools(){const t=app.querySelector('.tabs');if(!t)return;
+  const u=encodeURIComponent(location.href.split('#')[0]);
+  const sub=encodeURIComponent('Saber na Prática – App de Inglês e Francês');
+  const body=encodeURIComponent('Olá! Abra este link para estudar Inglês e Francês com áudio, tradução, pronúncia e exercícios:\n')+u;
+  t.insertAdjacentHTML('beforebegin','<div class="card">'+(STAND?'':'<button class="btn p" onclick="inst()">📲 Instalar app</button> ')+'<a class="btn" style="text-decoration:none;display:inline-block" href="mailto:?subject='+sub+'&body='+body+'">✉️ Enviar por e-mail</a><p class="note" id="im"></p></div>')}
+const _home=home;home=function(){_home();tools()};
+route(true);
+</script></body></html>
